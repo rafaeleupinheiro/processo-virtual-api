@@ -3,32 +3,21 @@ package br.com.previdenciavirtualapi.model;
 import br.com.previdenciavirtualapi.enume.CategoriaBeneficiario;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
-public class Documento {
+public class ArquivoRequest {
+  protected String cpf;
   protected CategoriaBeneficiario categoria;
-  protected String id;
   protected String nomeArquivo;
   protected String extensaoArquivo;
   protected Timestamp dataCadastro;
+  protected byte[] arquivoBase64;
 
-  public Documento(CategoriaBeneficiario categoria, String id, String nomeArquivo, String extensaoArquivo, Timestamp dataCadastro) {
-    this.id = id;
-    this.categoria = categoria;
-    this.nomeArquivo = nomeArquivo;
-    this.extensaoArquivo = extensaoArquivo;
-    this.dataCadastro = dataCadastro;
+  public String getCpf() {
+    return cpf;
   }
 
-  public Documento() {
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
+  public void setCpf(String cpf) {
+    this.cpf = cpf;
   }
 
   public CategoriaBeneficiario getCategoria() {
@@ -61,5 +50,13 @@ public class Documento {
 
   public void setDataCadastro(Timestamp dataCadastro) {
     this.dataCadastro = dataCadastro;
+  }
+
+  public byte[] getArquivoBase64() {
+    return arquivoBase64;
+  }
+
+  public void setArquivoBase64(byte[] arquivoBase64) {
+    this.arquivoBase64 = arquivoBase64;
   }
 }

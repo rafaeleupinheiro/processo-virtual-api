@@ -2,7 +2,7 @@ package br.com.previdenciavirtualapi.service;
 
 import br.com.previdenciavirtualapi.exception.BeneficiarioException;
 import br.com.previdenciavirtualapi.model.Beneficiario;
-import br.com.previdenciavirtualapi.model.BeneficiarioList;
+import br.com.previdenciavirtualapi.dao.BeneficiarioList;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

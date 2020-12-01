@@ -1,7 +1,7 @@
 package br.com.previdenciavirtualapi.enume;
 
 public enum CategoriaBeneficiario {
-  IDENTIFICAÇÃO(1, "IDENTIFICAÇÃO"),
+  IDENTIFICACAO(1, "IDENTIFICAÇÃO"),
   VIDA_FUNCIONAL(2, "VIDA FUNCIONAL"),
   CONTAGEM_DE_TEMPO(3, "CONTAGEM DE TEMPO"),
   REMUNERACAO_PROVENTOS(4, "REMUNERAÇÃO / PROVENTOS");
