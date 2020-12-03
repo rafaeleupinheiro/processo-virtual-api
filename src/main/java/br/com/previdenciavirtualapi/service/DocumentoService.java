@@ -2,19 +2,17 @@ package br.com.previdenciavirtualapi.service;
 
 import br.com.previdenciavirtualapi.dao.BeneficiarioList;
 import br.com.previdenciavirtualapi.dao.DocumentoList;
+import br.com.previdenciavirtualapi.enume.CategoriaBeneficiario;
 import br.com.previdenciavirtualapi.exception.BeneficiarioException;
 import br.com.previdenciavirtualapi.model.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class DocumentoService {
 
-  public List<Documento> pesquisar(Beneficiario beneficiario) throws BeneficiarioException {
+  public Map<String, List<Documento>> pesquisar(Beneficiario beneficiario) throws BeneficiarioException {
     validacaoBeneficiario(beneficiario);
     Map<String, Beneficiario> beneficiarios = BeneficiarioList.getInstance().getBeneficiarios();
     if (beneficiarios == null || beneficiarios.isEmpty() || !beneficiarios.containsKey(beneficiario.getCpf())) {
@@ -25,7 +23,8 @@ public class DocumentoService {
     if (documentos == null || documentos.isEmpty()) {
       throw new BeneficiarioException("Nenhum documento encontrado!");
     }
-    return new ArrayList<>(documentos.values());
+    List<Documento> docs = new ArrayList<>(documentos.values());
+    return agruparDocumentos(docs);
   }
 
   public void salvar(ArquivoRequest request) throws BeneficiarioException {
@@ -72,6 +71,46 @@ public class DocumentoService {
     if (beneficiarioDocumento.getIdDocumento() == null || beneficiarioDocumento.getIdDocumento().isEmpty()) {
       throw new BeneficiarioException("Favor informar o identificador do documento.");
     }
+  }
+
+  private Map<String, List<Documento>> agruparDocumentos(List<Documento> lista) {
+    List<Documento> identificacao = new ArrayList<>();
+    List<Documento> remuneracaoProventos = new ArrayList<>();
+    List<Documento> contagemTempo = new ArrayList<>();
+    List<Documento> vidaFuncional = new ArrayList<>();
+
+    for (Documento doc : lista) {
+      if (doc.getCategoria().equals(CategoriaBeneficiario.IDENTIFICACAO)) {
+        identificacao.add(doc);
+      }
+      if (doc.getCategoria().equals(CategoriaBeneficiario.REMUNERACAO_PROVENTOS)) {
+        remuneracaoProventos.add(doc);
+      }
+      if (doc.getCategoria().equals(CategoriaBeneficiario.CONTAGEM_DE_TEMPO)) {
+        contagemTempo.add(doc);
+      }
+      if (doc.getCategoria().equals(CategoriaBeneficiario.VIDA_FUNCIONAL)) {
+        vidaFuncional.add(doc);
+      }
+    }
+
+    Map<String, List<Documento>> map = new HashMap<>();
+    if (!identificacao.isEmpty()) {
+      map.put("identificacao", identificacao);
+    }
+
+    if (!remuneracaoProventos.isEmpty()) {
+      map.put("remuneracao_proventos", remuneracaoProventos);
+    }
+
+    if (!contagemTempo.isEmpty()) {
+      map.put("contagem_de_tempo", contagemTempo);
+    }
+
+    if (!vidaFuncional.isEmpty()) {
+      map.put("vida_funcional", vidaFuncional);
+    }
+    return map;
   }
 
   private void validacaoArquivo(ArquivoRequest request) throws BeneficiarioException {
